@@ -15,6 +15,11 @@ php:
     - hhvm
     - hhvm-nightly
 
+env:
+    matrix:
+        - DEPS=hight
+        - DEPS=low
+
 matrix:
     allow_failures:
         - php: nightly
@@ -32,6 +37,8 @@ before_script:
     - php -S localhost:8080 -t tests/fixtures/www &> /dev/null &
     - cp behat.yml{.dist,}
     - composer install
+
+    - test "$DEPS" == "hight" || composer update --prefer-lowest
 
 script:
     - ./bin/atoum
